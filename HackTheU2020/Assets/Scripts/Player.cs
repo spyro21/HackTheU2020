@@ -8,19 +8,18 @@ public class Player : MonoBehaviour
     public float rotationSpeed;
     public bool clockWiseRotation;
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
 
-        rotationZ += Input.GetAxisRaw("Horizontal") * rotationSpeed * Time.deltaTime;
-
-
+        // rotation movement
+        //rotationZ += Input.GetAxisRaw("Horizontal") * rotationSpeed * Time.deltaTime;
+        rotationSpeed += -(Input.GetAxisRaw("Horizontal") * Time.deltaTime);
+        rotationZ += rotationSpeed;
         transform.rotation = Quaternion.Euler(0, 0, rotationZ);
     }
 }
