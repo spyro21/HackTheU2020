@@ -33,7 +33,7 @@ public class Spawner : MonoBehaviour
         yOffset = 10;
 
         for (int i = 0; i < 50; i++) {
-            createStar();
+            //createStar();
         }
 
     }
@@ -49,13 +49,38 @@ public class Spawner : MonoBehaviour
         }
 
         if (randomNumber < 10 && numStars < 100) {
-            createStar();
+           // createStar();
         }
     }
 
     private void createStar() {
-        starX = Random.Range(-xOffset, xOffset) + player.transform.position.x;
+        
         starY = Random.Range(-yOffset, yOffset) + player.transform.position.y;
+        starX = Random.Range(-xOffset, xOffset) + player.transform.position.x;
+
+        int side = (int)Random.Range(0f, 4f);
+
+        switch (side) {
+            case 0:
+                starX = Random.Range(-xOffset, -10);
+                starY = Random.Range(-yOffset, yOffset) + player.transform.position.y;
+                break;
+
+            case 1:
+                starX = Random.Range(-xOffset, xOffset) + player.transform.position.x;
+                starY = Random.Range(5, yOffset);
+                break;
+
+            case 2:
+                starX = Random.Range(10, xOffset);
+                starY = Random.Range(-yOffset, yOffset) + player.transform.position.y;
+                break;
+
+            case 3:
+                starX = Random.Range(-xOffset, xOffset) + player.transform.position.x;
+                starY = Random.Range(yOffset, -5);
+                break;
+        }
 
         GameObject star = Instantiate(starGo, new Vector3(starX, starY, 1), Quaternion.identity);
         star.transform.SetParent(transform);

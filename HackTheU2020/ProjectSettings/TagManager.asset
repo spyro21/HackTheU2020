@@ -8,6 +8,7 @@ TagManager:
   - Health
   - GameHandler
   - Gas
+  - Spawner
   layers:
   - Default
   - TransparentFX

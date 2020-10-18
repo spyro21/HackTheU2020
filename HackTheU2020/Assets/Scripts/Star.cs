@@ -4,26 +4,29 @@ using UnityEngine;
 
 public class Star : MonoBehaviour
 {
-    private GameObject player;
+    private Transform player;
     private GameObject spawner;
 
     private float distanceFromX;
-    private float distanceFromY;  
+    private float distanceFromY;
+    private float distanceFrom;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("player");
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         spawner = GameObject.FindGameObjectWithTag("Spawner");
     }
 
     void Update()
     {
-        distanceFromX = player.transform.position.x - transform.position.x;
-        distanceFromY = player.transform.position.y - transform.position.y;
+        distanceFromX = transform.position.x - player.position.x;
+        distanceFromY = transform.position.y - player.position.y;
 
-        if (distanceFromX > 20 || distanceFromY > 15) {
+        distanceFrom = Mathf.Sqrt(Mathf.Pow(distanceFromX, 2) + Mathf.Pow(distanceFromY, 2));
+
+        if (Mathf.Abs(distanceFrom) > 25) {
             Destroy(gameObject);
-            spawner.SendMessage("DecrementStars");
+            spawner.SendMessage("decrementStars");
         }
     }
 }
