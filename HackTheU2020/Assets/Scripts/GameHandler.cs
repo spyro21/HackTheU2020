@@ -6,7 +6,11 @@ using UnityEngine.SceneManagement;
 public class GameHandler : MonoBehaviour
 {
 
-    public void gameOver() {
+    public void nextScene() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void playGameAgain() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }

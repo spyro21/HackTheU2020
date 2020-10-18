@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private Rigidbody2D rb;
+
+    // health
     private GameObject healthGo;
     private bool damaged;
 
-    private Rigidbody2D rb;
-
+    //for game over (oxygen)
+    private GameObject gameHandler;
 
     // Sprite Renderer
     private SpriteRenderer sr;
@@ -16,17 +19,24 @@ public class Player : MonoBehaviour
     public Sprite rocketFire;
 
 
+    // fuel
+    public float fuel = 500f;
+    public float oxygen = 10f;
+
 
     //movement values
-    public float movementSpeed;
+    public float thrustSpeed;
+    public float forwardVelocity;
 
     // rotation values
     private float rotationZ;
     public float rotationOffset;
-    public float rotationSpeed;
+    public float rotationVelocity;
 
     void Start()
     {
+        gameHandler = GameObject.FindGameObjectWithTag("GameHandler");
+
         healthGo = GameObject.FindGameObjectWithTag("Health");
         damaged = false;
 
@@ -39,6 +49,7 @@ public class Player : MonoBehaviour
         
     }
 
+    // on collision with asteroid
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Collision");
@@ -53,24 +64,46 @@ public class Player : MonoBehaviour
 
     IEnumerator waitForDamaged() {
         yield return new WaitForSeconds(4f);
+        damaged = false;
     }
 
+    
 
     void Update()
     {
+        // find velocity of ship through pythagorean theorem
+        forwardVelocity = Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.y, 2));
+
+        // check if oxygen is depleted, game over
+        if (fuel <= 0) {
+            oxygen -= Time.deltaTime;
+
+            if (oxygen <= 0)
+            {
+                gameHandler.SendMessage("nextScene");
+            }
+        }
+
+        
 
         // damage check
         if (damaged) {
             StartCoroutine(waitForDamaged());
-            damaged = false;
         }
 
 
         // forward movement
-        if (Input.GetAxisRaw("Jump") != 0)
+        if (Input.GetAxisRaw("Jump") != 0 && fuel > 0)
         {
-            rb.AddForce(transform.up * movementSpeed);
+            
+            // caps the velocity to a certain maximum
+            if(!(forwardVelocity > 10)) {
+                rb.AddForce(transform.up * thrustSpeed);
+            }
+
+
             sr.sprite = rocketFire;
+            fuel -= 0.5f;
 
         }
         else
@@ -81,16 +114,38 @@ public class Player : MonoBehaviour
 
 
         // rotation movement
-        rotationSpeed += -(Input.GetAxisRaw("Horizontal") * Time.deltaTime) * rotationOffset;
-        rotationZ += rotationSpeed;
+        rotationVelocity += -(Input.GetAxisRaw("Horizontal") * Time.deltaTime) * rotationOffset;
+        rotationZ += rotationVelocity;
         transform.rotation = Quaternion.Euler(0, 0, rotationZ);
 
 
 
     }
+
+    // getter method
+    public float getVelocity()
+    {
+        return forwardVelocity;
+    }
+
+    public float getRotationVelocity()
+    {
+        return rotationVelocity;
+    }
+
+    public float getFuel()
+    {
+        return fuel;
+    }
+
+    public float getOxygen()
+    {
+        return oxygen;
+    }
+
+    public void refillGas()
+    {
+        fuel = 500;
+    }
+
 }
-
-
-
-
-//healthGo.SendMessage("takeDamage");

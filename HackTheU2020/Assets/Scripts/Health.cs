@@ -23,8 +23,9 @@ public class Health : MonoBehaviour
 
     void Update()
     {
+        // check if dead
         if (health <= 0) {
-            gameHandler.SendMessage("gameOver");
+            gameHandler.SendMessage("nextScene");
         }
     }
 
