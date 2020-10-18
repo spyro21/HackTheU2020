@@ -4,27 +4,38 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    /// <summary>
+    /// reference to the player gameObject
+    /// </summary>
     private GameObject player;
 
-    // stars
-    private float starX;
-    private float starY;
-
-    public GameObject starGo;
-
-    private int numStars;
-
     // asteroids
-    private float randomNumber;
+    /// <summary>
+    /// random number that decides the spawnrate of asteroids
+    /// </summary>
+    private float asteroidSpawnRate;
 
+    /// <summary>
+    /// offset for asteroid spawn location on x coord
+    /// </summary>
     private float xOffset;
+
+    /// <summary>
+    /// offset for asteroid spawn location on y coord
+    /// </summary>
     private float yOffset;
 
+    /// <summary>
+    /// random number between 0-3 that determine which side of the player the asteroids spawn on
+    /// </summary>
     private int spawnSide;
 
+
+    /// <summary>
+    /// reference to the asteroid gameObjecta
+    /// </summary>
     public GameObject asteroidGo;
 
-    // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -38,56 +49,20 @@ public class Spawner : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
-        randomNumber = Random.Range(0f, 100f);
+        asteroidSpawnRate = Random.Range(0f, 100f);
 
-        if (randomNumber < 1) {
+        if (asteroidSpawnRate < 1) {
             spawnSide = (int)Random.Range(0f, 4f);
             createAsteroid(spawnSide);
         }
-
-        if (randomNumber < 10 && numStars < 100) {
-           // createStar();
-        }
     }
 
-    private void createStar() {
-        
-        starY = Random.Range(-yOffset, yOffset) + player.transform.position.y;
-        starX = Random.Range(-xOffset, xOffset) + player.transform.position.x;
-
-        int side = (int)Random.Range(0f, 4f);
-
-        switch (side) {
-            case 0:
-                starX = Random.Range(-xOffset, -10);
-                starY = Random.Range(-yOffset, yOffset) + player.transform.position.y;
-                break;
-
-            case 1:
-                starX = Random.Range(-xOffset, xOffset) + player.transform.position.x;
-                starY = Random.Range(5, yOffset);
-                break;
-
-            case 2:
-                starX = Random.Range(10, xOffset);
-                starY = Random.Range(-yOffset, yOffset) + player.transform.position.y;
-                break;
-
-            case 3:
-                starX = Random.Range(-xOffset, xOffset) + player.transform.position.x;
-                starY = Random.Range(yOffset, -5);
-                break;
-        }
-
-        GameObject star = Instantiate(starGo, new Vector3(starX, starY, 1), Quaternion.identity);
-        star.transform.SetParent(transform);
-        numStars++;
-    }
-
-
+    /// <summary>
+    /// spawns a new asteroid gameobject that is pointing in the general direction of the player, with a random side.
+    /// </summary>
+    /// <param name="side">random number that decides which side the asteroid spawns on</param>
     private void createAsteroid(int side) {
         float xPos = 0;
         float yPos = 0;
@@ -121,10 +96,6 @@ public class Spawner : MonoBehaviour
         
         GameObject newAsteroid = Instantiate(asteroidGo,new Vector3(xPos,yPos,1),Quaternion.Euler(0f,0f,zRot));
         newAsteroid.transform.SetParent(transform); //sets asteroid to be a sub gameobject of Spawner
-    }
-
-    public void decrementStars() {
-        numStars--;
     }
 
 }

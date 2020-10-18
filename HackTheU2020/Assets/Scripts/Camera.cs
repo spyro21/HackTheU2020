@@ -5,29 +5,33 @@ using UnityEngine;
 public class Camera : MonoBehaviour
 {
     // instance variables
-    private Transform target;
 
+    /// <summary>
+    /// the player reference for the camera, so that the camera can follow this gameObject
+    /// </summary>
+    private Transform player;
+
+    /// <summary>
+    /// speed of camera 
+    /// </summary>
     public float speed;
-    private float catchUpSpeed;
+
 
     void Start()
     {
         // initializing instance variables if needed
-        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-
-        catchUpSpeed = speed * 3;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
     void Update()
     {
-
+        // move toward target(player)
         if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().getVelocity() > 5)
         {
-            transform.position = Vector2.MoveTowards(transform.position, target.position, catchUpSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, player.position, (speed * 3) * Time.deltaTime);
         }
         else {
-            transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
         }
-        // move toward target(player)
     }
 }

@@ -5,17 +5,22 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    Text timeText;
-    public float time;
+    /// <summary>
+    /// reference to the time text gameobjects text component
+    /// </summary>
+    private Text timeText;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// time the player has survived
+    /// </summary>
+    private float time;
+
     void Start()
     {
         time = 0;
         timeText = gameObject.GetComponent<Text>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         time += Time.deltaTime;
