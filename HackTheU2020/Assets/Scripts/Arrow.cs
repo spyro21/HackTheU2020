@@ -32,7 +32,7 @@ public class Arrow : MonoBehaviour
         transform.position = pos;
 
         // points towards gas
-        
+        /*
         dx = player.position.x - gas.position.x;
         dy = player.position.y - gas.position.y;
         
@@ -41,6 +41,7 @@ public class Arrow : MonoBehaviour
         thetaZ = ((thetaZ * 360) / Mathf.PI);
         Debug.Log(thetaZ);
         transform.rotation = Quaternion.Euler(0f, 0f, thetaZ);
+        */
         
     }
 }

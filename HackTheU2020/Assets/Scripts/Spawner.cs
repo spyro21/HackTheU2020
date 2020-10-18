@@ -6,6 +6,15 @@ public class Spawner : MonoBehaviour
 {
     private GameObject player;
 
+    // stars
+    private float starX;
+    private float starY;
+
+    public GameObject starGo;
+
+    private int numStars;
+
+    // asteroids
     private float randomNumber;
 
     private float xOffset;
@@ -22,6 +31,11 @@ public class Spawner : MonoBehaviour
 
         xOffset = 15;
         yOffset = 10;
+
+        for (int i = 0; i < 50; i++) {
+            createStar();
+        }
+
     }
 
     // Update is called once per frame
@@ -33,6 +47,19 @@ public class Spawner : MonoBehaviour
             spawnSide = (int)Random.Range(0f, 4f);
             createAsteroid(spawnSide);
         }
+
+        if (randomNumber < 10 && numStars < 100) {
+            createStar();
+        }
+    }
+
+    private void createStar() {
+        starX = Random.Range(-xOffset, xOffset) + player.transform.position.x;
+        starY = Random.Range(-yOffset, yOffset) + player.transform.position.y;
+
+        GameObject star = Instantiate(starGo, new Vector3(starX, starY, 1), Quaternion.identity);
+        star.transform.SetParent(transform);
+        numStars++;
     }
 
 
@@ -70,4 +97,9 @@ public class Spawner : MonoBehaviour
         GameObject newAsteroid = Instantiate(asteroidGo,new Vector3(xPos,yPos,1),Quaternion.Euler(0f,0f,zRot));
         newAsteroid.transform.SetParent(transform); //sets asteroid to be a sub gameobject of Spawner
     }
+
+    public void decrementStars() {
+        numStars--;
+    }
+
 }
